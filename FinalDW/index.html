@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de Expedientes Médicos</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Control de Expedientes Médicos</h1>
+
+    <!-- Formulario para agregar un nuevo paciente -->
+    <form id="paciente-form">
+        <label for="name">Nombre:</label>
+        <input type="text" id="name" required>
+        <br>
+        <label for="apellidos">Apellidos:</label>
+        <input type="text" id="apellidos" required>
+        <br>
+        <label for="fechadeNacimiento">Fecha de Nacimiento:</label>
+        <input type="date" id="fechadeNacimiento" required>
+        <br>
+        <label for "genero">Género:</label>
+        <input type="text" id="genero" required>
+        <br>
+        <label for="direccion">Dirección:</label>
+        <input type="text" id="direccion" required>
+        <br>
+        <label for="telefono">Teléfono:</label>
+        <input type="tel" id="telefono" required>
+        <br>
+        <button type="submit">Agregar Paciente</button>
+    </form>
+
+    <!-- Tabla de pacientes -->
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellidos</th>
+                <th>Fecha de Nacimiento</th>
+                <th>Género</th>
+                <th>Dirección</th>
+                <th>Teléfono</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="pacientes-list">
+        </tbody>
+    </table>
+
+    <script>
+        const pacientesList = document.getElementById('pacientes-list');
+        const pacienteForm = document.getElementById('paciente-form');
+
+        pacienteForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const nameInput = document.getElementById('name');
+            const apellidosInput = document.getElementById('apellidos');
+            const fechadeNacimientoInput = document.getElementById('fechadeNacimiento');
+            const generoInput = document.getElementById('genero');
+            const direccionInput = document.getElementById('direccion');
+            const telefonoInput = document.getElementById('telefono');
+
+            const newRow = pacientesList.insertRow();
+            const cellNombre = newRow.insertCell(0);
+            const cellApellidos = newRow.insertCell(1);
+            const cellFechaNacimiento = newRow.insertCell(2);
+            const cellGenero = newRow.insertCell(3);
+            const cellDireccion = newRow.insertCell(4);
+            const cellTelefono = newRow.insertCell(5);
+            const cellAcciones = newRow.insertCell(6);
+
+            cellNombre.innerHTML = nameInput.value;
+            cellApellidos.innerHTML = apellidosInput.value;
+            cellFechaNacimiento.innerHTML = fechadeNacimientoInput.value;
+            cellGenero.innerHTML = generoInput.value;
+            cellDireccion.innerHTML = direccionInput.value;
+            cellTelefono.innerHTML = telefonoInput.value;
+
+            const editButton = document.createElement('button');
+            editButton.textContent = 'Editar';
+            editButton.classList.add('edit');
+            cellAcciones.appendChild(editButton);
+
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'Eliminar';
+            deleteButton.classList.add('delete');
+            cellAcciones.appendChild(deleteButton);
+
+            editButton.addEventListener('click', () => {
+                // Lógica para editar el paciente
+                nameInput.value = cellNombre.innerHTML;
+                apellidosInput.value = cellApellidos.innerHTML;
+                fechadeNacimientoInput.value = cellFechaNacimiento.innerHTML;
+                generoInput.value = cellGenero.innerHTML;
+                direccionInput.value = cellDireccion.innerHTML;
+                telefonoInput.value = cellTelefono.innerHTML;
+
+                // Ocultar el botón "Agregar Paciente"
+                pacienteForm.querySelector('button[type="submit"]').style.display = 'none';
+
+                // Mostrar un botón "Guardar Cambios"
+                const saveButton = document.createElement('button');
+                saveButton.textContent = 'Guardar Cambios';
+                saveButton.classList.add('save');
+                cellAcciones.appendChild(saveButton);
+
+                saveButton.addEventListener('click', () => {
+                    cellNombre.innerHTML = nameInput.value;
+                    cellApellidos.innerHTML = apellidosInput.value;
+                    cellFechaNacimiento.innerHTML = fechadeNacimientoInput.value;
+                    cellGenero.innerHTML = generoInput.value;
+                    cellDireccion.innerHTML = direccionInput.value;
+                    cellTelefono.innerHTML = telefonoInput.value;
+
+                    // Restablecer el formulario y los botones
+                    pacienteForm.reset();
+                    saveButton.remove();
+                    pacienteForm.querySelector('button[type="submit"]').style.display = 'block';
+                });
+            });
+
+            deleteButton.addEventListener('click', () => {
+                newRow.remove();
+            });
+
+            // Limpia el formulario
+            nameInput.value = '';
+            apellidosInput.value = '';
+            fechadeNacimientoInput.value = '';
+            generoInput.value = '';
+            direccionInput.value = '';
+            telefonoInput.value = '';
+        });
+    </script>
+</body>
+</html>
